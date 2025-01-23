@@ -1,0 +1,117 @@
+﻿@model WebApplication2.Models.books
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background-color: #F49999;
+            color: white;
+            width: 100%;
+            text-align: center;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #F49999;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+            .btn:hover {
+                background-color: #F78888;
+            }
+
+
+
+        table {
+            width: 1120px;
+            border-top: 7px solid #F78888;
+            border-collapse: collapse;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid #dddddd;
+        }
+
+        td {
+            text-align: left;
+            padding: 10px;
+            border: 3px solid #F78888;
+        }
+
+        th {
+            text-align: center;
+            padding: 10px;
+            border: 3px solid #F78888;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+    <h1>Добавить книгу</h1>
+    </header>
+
+    <form action="/books/create" method="post">
+        @Html.AntiForgeryToken()
+        <div>
+            <label for="title">Название:</label><br>
+            <input type="text" id="title" name="title" asp-for="title" class="form-control" placeholder="Введите название книги" />
+            <span asp-validation-for="title" class="text-danger"></span>
+        </div>
+        <br>
+        <div>
+            <label for="publicationyear">Год публикации:</label><br>
+            <input type="text" id="publicationyear" name="publicationyear" asp-for="publicationyear" class="form-control" placeholder="Введите год публикации"/>
+            <span asp-validation-for="publicationyear" class="text-danger"></span>
+        </div>
+        <br>
+        <div>
+            <label for="authorid">Автор:</label><br>
+            @Html.DropDownList("authorid", (SelectList)ViewBag.AuthorList, "Выбрать автора")
+            <span asp-validation-for="authorid" class="text-danger"></span>
+        </div>
+        <br>
+        <button type="submit">Добавить</button>
+    </form>
+    <div class="container">
+        <a href="/books/Index" class="btn">Назад к списку</a>
+    </div>
+</body>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

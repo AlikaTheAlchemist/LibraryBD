@@ -1,0 +1,156 @@
+﻿@model WebApplication2.Models.readers
+
+@{
+    ViewData["Title"] = "Создать читателя";
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background-color: #F49999;
+            color: white;
+            width: 100%;
+            text-align: center;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #F49999;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+            .btn:hover {
+                background-color: #F78888;
+            }
+
+
+
+        table {
+            width: 1120px;
+            border-top: 7px solid #F78888;
+            border-collapse: collapse;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid #dddddd;
+        }
+
+        td {
+            text-align: left;
+            padding: 10px;
+            border: 3px solid #F78888;
+        }
+
+        th {
+            text-align: center;
+            padding: 10px;
+            border: 3px solid #F78888;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Создать читателя</h1>
+    </header>
+
+    <form asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+
+        <div>
+            <label for="firstname">Имя:</label><br>
+            <input type="text" id="firstname" name="firstname" asp-for="firstname" class="form-control" placeholder="Введите имя читателя" maxlength="20" />
+            <span asp-validation-for="firstname" class="text-danger"></span>
+        </div>
+
+        <br>
+
+        <div>
+            <label for="middlename">Отчество:</label><br>
+            <input type="text" id="middlename" name="middlename" asp-for="middlename" class="form-control" placeholder="Введите отчество читателя" maxlength="20" />
+            <span asp-validation-for="middlename" class="text-danger"></span>
+        </div>
+
+        <br>
+        <div>
+            <label for="lastname">Фамилия:</label><br>
+            <input type="text" id="lastname" name="lastname" asp-for="lastname" class="form-control" placeholder="Введите фамилию читателя" maxlength="20" />
+            <span asp-validation-for="lastname" class="text-danger"></span>
+        </div>
+
+        <br>
+
+        <div>
+            <label for="birthdate">Дата рождения:</label><br>
+            <input type="date" id="birthdate" name="birthdate" asp-for="birthdate" class="form-control" />
+            <span asp-validation-for="birthdate" class="text-danger"></span>
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="registrationdate">Дата регистрации:</label><br>
+            <div style="display: flex; align-items: center;">
+                <input type="date" id="registrationdate" name="registrationdate" asp-for="registrationdate" class="form-control" />
+                <button type="button" class="btn btn-secondary" onclick="setTodayDate()">Сегодня</button>
+
+            </div>
+            <span asp-validation-for="registrationdate" class="text-danger"></span>
+        </div>
+
+        <br>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Создать</button>
+            <a href="/readers/Index" class="btn">Назад к списку</a>
+        </div>
+    </form>
+</body>
+
+<script>
+     function setTodayDate() {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0'); // Месяцы начинаются с 0
+        const day = String(today.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
+        document.getElementById('registrationdate').value = formattedDate;
+    }
+
+    window.onload = setTodayDate;
+</script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

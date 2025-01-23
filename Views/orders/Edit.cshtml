@@ -1,0 +1,162 @@
+﻿@model WebApplication2.Models.orders
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background-color: #F49999;
+            color: white;
+            width: 100%;
+            text-align: center;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #F49999;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+            .btn:hover {
+                background-color: #F78888;
+            }
+
+
+
+        table {
+            width: 1120px;
+            border-top: 7px solid #F78888;
+            border-collapse: collapse;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid #dddddd;
+        }
+
+        td {
+            text-align: left;
+            padding: 10px;
+            border: 3px solid #F78888;
+        }
+
+        th {
+            text-align: center;
+            padding: 10px;
+            border: 3px solid #F78888;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Редактировать заказ</h1>
+    </header>
+
+    <form asp-action="Edit" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="id" />
+
+
+
+        <div class="form-group">
+            <label for="readerid">Читатель:</label><br>
+            @Html.DropDownList("readerid", (SelectList)ViewBag.ReaderList, "Выбрать читателя")
+            <span asp-validation-for="readerid" class="text-danger"></span>
+        </div>
+        <br>
+
+        <div class="form-group">
+            <label for="bookid">Книга:</label><br>
+            @Html.DropDownList("bookid", (SelectList)ViewBag.BookList, "Выбрать книгу")
+            <span asp-validation-for="bookid" class="text-danger"></span>
+        </div>
+        <br>
+
+
+
+        <div class="form-group">
+            <label for="orderdate">Дата заказа:</label><br>
+            <div style="display: flex; align-items: center;">
+                <input type="date" id="orderdate" name="orderdate" asp-for="orderdate" class="form-control" />
+                <button type="button" class="btn btn-secondary" onclick="setTodayOrderDate()">Сегодня</button>
+            </div>
+            <span asp-validation-for="orderdate" class="text-danger"></span>
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="returndate">Дата возврата:</label><br>
+            <div style="display: flex; align-items: center;">
+                <input type="date" id="returndate" name="returndate" asp-for="returndate" class="form-control" />
+                <button type="button" class="btn btn-secondary" onclick="setMonthAheadReturnDate()">Через месяц</button>
+            </div>
+            <span asp-validation-for="returndate" class="text-danger"></span>
+        </div>
+        <br>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <a asp-action="Index" class="btn">Назад к списку</a>
+        </div>
+    </form>
+
+</body>
+
+<script>
+    function setTodayOrderDate() {
+       const today = new Date();
+       const year = today.getFullYear();
+       const month = String(today.getMonth() + 1).padStart(2, '0');
+       const day = String(today.getDate()).padStart(2, '0');
+       const formattedDate = `${year}-${month}-${day}`;
+       document.getElementById('orderdate').value = formattedDate;
+    }
+
+    function setMonthAheadReturnDate() {
+         const today = new Date();
+         const nextMonth = new Date(today);
+         nextMonth.setMonth(today.getMonth() + 1);
+         const year = nextMonth.getFullYear();
+         const month = String(nextMonth.getMonth() + 1).padStart(2, '0');
+         const day = String(nextMonth.getDate()).padStart(2, '0');
+         const formattedDate = `${year}-${month}-${day}`;
+         document.getElementById('returndate').value = formattedDate;
+    }
+    window.onload = function () {
+        setTodayOrderDate();
+         setMonthAheadReturnDate();
+    };
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

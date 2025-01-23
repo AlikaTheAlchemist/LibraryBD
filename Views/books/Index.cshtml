@@ -1,0 +1,143 @@
+﻿@model IEnumerable<WebApplication2.Models.books>
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background-color: #F49999;
+            color: white;
+            width: 100%;
+            text-align: center;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #F49999;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+            .btn:hover {
+                background-color: #F78888;
+            }
+
+
+
+        table {
+            width: 1120px;
+            border-top: 7px solid #F78888;
+            border-collapse: collapse;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid #dddddd;
+        }
+
+        td {
+            text-align: left;
+            padding: 10px;
+            border: 3px solid #F78888;
+        }
+
+        th {
+            text-align: center;
+            padding: 10px;
+            border: 3px solid #F78888;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Книги</h1>
+        <p>Все доступные в библиотеке книги</p>
+    </header>
+
+    <div class="container">
+        <a href="/Home/Index" class="btn">Вернуться на главную страницу</a>
+        <a href="/books/Create" class="btn">Добавить книгу</a>
+        <a href="/books/Delete" class="btn btn-danger">Удалить книгу</a>
+    </div>
+    <br></br>
+
+
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-striped">
+
+            <thead>
+                <tr>
+                    <th>
+                       ID
+                    </th>
+                    <th>
+                        Название
+                    </th>
+                    <th>
+                        Год издания
+                    </th>
+                    <th>
+                        Автор
+                    </th>
+                    <th>
+                        Действие
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.publicationyear)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.author.FullName)
+                        </td>
+                        <td>
+                            <a href="/books/Edit/@item.id" class="btn btn-primary">Редактировать</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Нет книг для отображения.</p>
+    }
+</body>
